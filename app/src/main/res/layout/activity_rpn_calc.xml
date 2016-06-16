@@ -8,39 +8,44 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="mx.peta.mod4practica1.RpnCalc">
-
+    tools:context=".Activity_RpnCalc">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="0"
-        android:id="@+id/stackX" />
+        android:textSize="40sp"
+        android:id="@+id/registroX" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
             android:text="CHS"
+            android:textSize="20sp"
             android:id="@+id/CHS"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="CLS"
+            android:textSize="20sp"
             android:id="@+id/CLS"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="CLX"
+            android:textSize="20sp"
             android:id="@+id/CLX"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
-            android:text="C"
+            android:text="x~y"
+            android:textSize="20sp"
             android:id="@+id/C"
             android:layout_weight="1"
             android:layout_width="wrap_content"
@@ -52,24 +57,28 @@
         android:layout_height="wrap_content">
         <Button
             android:text="7"
+            android:textSize="20sp"
             android:id="@+id/siete"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="8"
+            android:textSize="20sp"
             android:id="@+id/ocho"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="9"
+            android:textSize="20sp"
             android:id="@+id/nueve"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="/"
+            android:textSize="20sp"
             android:id="@+id/division"
             android:layout_weight="1"
             android:layout_width="wrap_content"
@@ -81,24 +90,28 @@
         android:layout_height="wrap_content">
         <Button
             android:text="4"
+            android:textSize="20sp"
             android:id="@+id/cuatro"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="5"
+            android:textSize="20sp"
             android:id="@+id/cinco"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="6"
+            android:textSize="20sp"
             android:id="@+id/seis"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="*"
+            android:textSize="20sp"
             android:id="@+id/multiplicasion"
             android:layout_weight="1"
             android:layout_width="wrap_content"
@@ -110,25 +123,29 @@
         android:layout_height="wrap_content">
         <Button
             android:text="1"
+            android:textSize="20sp"
             android:id="@+id/uno"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="2"
+            android:textSize="20sp"
             android:id="@+id/dos"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="3"
+            android:textSize="20sp"
             android:id="@+id/tres"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="-"
-            android:id="@+id/sustracsion"
+            android:textSize="20sp"
+            android:id="@+id/sustraccion"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -139,24 +156,28 @@
         android:layout_height="wrap_content">
         <Button
             android:text="0"
+            android:textSize="20sp"
             android:id="@+id/cero"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
-            android:text="."
-            android:id="@+id/punto"
+            android:text="%"
+            android:textSize="20sp"
+            android:id="@+id/modulo"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="Enter"
+            android:textSize="18sp"
             android:id="@+id/enter"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:text="+"
+            android:textSize="20sp"
             android:id="@+id/adicion"
             android:layout_weight="1"
             android:layout_width="wrap_content"
