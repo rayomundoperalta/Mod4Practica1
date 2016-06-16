@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import mx.peta.mod4practica1.Utileria.SystemMsg;
+
 /*
     Se implementa una calculadora en notación polaca porque esmas simple de implementar
     solo se manejan numeros enteros y se limitan a 10 posiciones de entrada para que no ocurra
@@ -17,8 +21,21 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
 
     Vibrator mVibrator;
 
-    private long registroX = 0;
-    private TextView txtRegistroX;
+    private long input = 0;
+    /* HP stack */
+    private long lastX = 0;
+    private long X = 0;
+    private long Y = 0;
+    private long Z = 0;
+    private long T = 0;
+
+    private TextView txtPantalla;
+    private TextView pantallaT;
+    private TextView pantallaZ;
+    private TextView pantallaY;
+    private TextView pantallaX;
+    private TextView pantallaLastX;
+
     final private int maximoNumeroDeDigitos = 10; // limitamos el numero de digitos para no manejar overflow
     private int cuantosDigitos = 0;
 
@@ -26,15 +43,21 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rpn_calc);
-        txtRegistroX = (TextView) findViewById(R.id.registroX);
-        txtRegistroX.setText(String.valueOf(registroX));
+        txtPantalla = (TextView) findViewById(R.id.pantalla);
+        txtPantalla.setText(String.valueOf(lastX));
+        pantallaT = (TextView) findViewById(R.id.T);
+        pantallaZ = (TextView) findViewById(R.id.Z);
+        pantallaY = (TextView) findViewById(R.id.Y);
+        pantallaX = (TextView) findViewById(R.id.X);
+        pantallaLastX = (TextView) findViewById(R.id.lastX);
+
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         // Asignamos los event handlers a los botones
         findViewById(R.id.CHS).setOnClickListener(this);
         findViewById(R.id.CLS).setOnClickListener(this);
         findViewById(R.id.CLX).setOnClickListener(this);
-        findViewById(R.id.C).setOnClickListener(this);
+        findViewById(R.id.x_intercambia_y).setOnClickListener(this);
         findViewById(R.id.siete).setOnClickListener(this);
         findViewById(R.id.ocho).setOnClickListener(this);
         findViewById(R.id.nueve).setOnClickListener(this);
@@ -57,17 +80,32 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.CHS:
-                registroX = - registroX;
+                if (cuantosDigitos > 0) {
+                    input = - input;
+                    txtPantalla.setText(String.valueOf(input));
+                } else {
+                    X = -X;
+                    txtPantalla.setText(String.valueOf(X));
+                }
                 break;
             case R.id.CLS:
-                registroX      = 0;
+                X = 0;
+                Y = 0;
+                Z = 0;
+                T = 0;
+                input = 0;
                 cuantosDigitos = 0;
+                txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.CLX:
-                registroX      = 0;
+                X = 0;
                 cuantosDigitos = 0;
                 break;
-            case R.id.C:
+            case R.id.x_intercambia_y:
+                long temp;
+                temp = X;
+                X = Y;
+                Y = temp;
                 break;
             case R.id.siete:
                 capturaDigito(7);
@@ -79,6 +117,20 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 capturaDigito(9);
                 break;
             case R.id.division:
+                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
+                    T = Z;
+                    Z = Y;
+                    Y = X;
+                    X = input;
+                    lastX = X;
+                    input = 0;
+                    cuantosDigitos = 0;
+                } else
+                    lastX = X;
+                X = X / Y;
+                Y = Z;
+                Z = T;
+                txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.cuatro:
                 capturaDigito(4);
@@ -90,6 +142,20 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 capturaDigito(6);
                 break;
             case R.id.multiplicasion:
+                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
+                    T = Z;
+                    Z = Y;
+                    Y = X;
+                    X = input;
+                    lastX = X;
+                    input = 0;
+                    cuantosDigitos = 0;
+                } else
+                    lastX = X;
+                X = X * Y;
+                Y = Z;
+                Z = T;
+                txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.uno:
                 capturaDigito(1);
@@ -101,29 +167,90 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 capturaDigito(3);
                 break;
             case R.id.sustraccion:
+                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
+                    T = Z;
+                    Z = Y;
+                    Y = X;
+                    X = input;
+                    lastX = X;
+                    input = 0;
+                    cuantosDigitos = 0;
+                } else
+                    lastX = X;
+                X = X - Y;
+                Y = Z;
+                Z = T;
+                txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.cero:
                 capturaDigito(0);
                 break;
             case R.id.modulo:
+                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
+                    T = Z;
+                    Z = Y;
+                    Y = X;
+                    X = input;
+                    lastX = X;
+                    input = 0;
+                    cuantosDigitos = 0;
+                } else
+                    lastX = X;
+                X = X % Y;
+                Y = Z;
+                Z = T;
+                txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.enter:
+                if (cuantosDigitos > 0) {
+                    T = Z;
+                    Z = Y;
+                    Y = X;
+                    X = input;
+                    input = 0;
+                    cuantosDigitos = 0;
+                } else {
+                    T = Z;
+                    Z = Y;
+                    Y = X;
+                }
+                txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.adicion:
+                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
+                    T = Z;
+                    Z = Y;
+                    Y = X;
+                    X = input;
+                    lastX = X;
+                    input = 0;
+                    cuantosDigitos = 0;
+                } else
+                    lastX = X;
+                X = X + Y;
+                Y = Z;
+                Z = T;
+                txtPantalla.setText(String.valueOf(X));
                 break;
         }
-        txtRegistroX.setText(String.valueOf(registroX));
+        pantallaLastX.setText(String.valueOf(lastX));
+        pantallaT.setText(String.valueOf(T));
+        pantallaZ.setText(String.valueOf(Z));
+        pantallaY.setText(String.valueOf(Y));
+        pantallaX.setText(String.valueOf(X));
+
     }
 
     private void capturaDigito(int d) {
         if (cuantosDigitos++ < maximoNumeroDeDigitos) {
-            if (registroX < 0)
-                registroX = registroX * 10 - d;
+            if (input < 0)
+                input = input * 10 - d;
             else
-                registroX = registroX * 10 + d;
+                input = input * 10 + d;
         } else {
             // Vibra por 100 milisegundos
             mVibrator.vibrate(100);
         }
+        txtPantalla.setText(String.valueOf(input));
     }
 }
