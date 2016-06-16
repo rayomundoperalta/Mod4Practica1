@@ -98,7 +98,14 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.CLX:
-                X = 0;
+                if (cuantosDigitos > 0) {
+                    input = 0;
+                    cuantosDigitos = 0;
+                    txtPantalla.setText(String.valueOf(input));
+                } else {
+                    X = 0;
+                    txtPantalla.setText(String.valueOf(X));
+                }
                 cuantosDigitos = 0;
                 break;
             case R.id.x_intercambia_y:
@@ -106,6 +113,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 temp = X;
                 X = Y;
                 Y = temp;
+                txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.siete:
                 capturaDigito(7);
@@ -127,7 +135,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                     cuantosDigitos = 0;
                 } else
                     lastX = X;
-                X = X / Y;
+                X = Y / X;
                 Y = Z;
                 Z = T;
                 txtPantalla.setText(String.valueOf(X));
@@ -177,7 +185,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                     cuantosDigitos = 0;
                 } else
                     lastX = X;
-                X = X - Y;
+                X = Y - X;
                 Y = Z;
                 Z = T;
                 txtPantalla.setText(String.valueOf(X));
@@ -196,7 +204,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                     cuantosDigitos = 0;
                 } else
                     lastX = X;
-                X = X % Y;
+                X = Y % X;
                 Y = Z;
                 Z = T;
                 txtPantalla.setText(String.valueOf(X));
