@@ -15,7 +15,7 @@ import mx.peta.mod4practica1.Utileria.SystemMsg;
     Se implementa una calculadora en notación polaca porque esmas simple de implementar
     solo se manejan numeros enteros y se limitan a 10 posiciones de entrada para que no ocurra
     overflow en la multiplicaciones
-    Todas las operaciones son con numeros enteros por lo cual se implementa la división y el modulo
+    Como todas las operaciones son con numeros enteros se implementa la división entera y el modulo
  */
 public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickListener {
 
@@ -76,6 +76,10 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.adicion).setOnClickListener(this);
     }
 
+    /*
+        En este manejador de eventos se implementa toda la funcionalidad de la calculadora
+        Todos los eventos estan relacionados a una tecla.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -106,7 +110,6 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                     X = 0;
                     txtPantalla.setText(String.valueOf(X));
                 }
-                cuantosDigitos = 0;
                 break;
             case R.id.x_intercambia_y:
                 long temp;
@@ -125,17 +128,11 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 capturaDigito(9);
                 break;
             case R.id.division:
-                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
-                    T = Z;
-                    Z = Y;
-                    Y = X;
-                    X = input;
-                    lastX = X;
-                    input = 0;
-                    cuantosDigitos = 0;
-                } else
-                    lastX = X;
-                X = Y / X;
+                verificaInput();
+                if (X == 0)
+                    SystemMsg.msg(getApplicationContext(), "división por cero invalida");
+                else
+                    X = Y / X;
                 Y = Z;
                 Z = T;
                 txtPantalla.setText(String.valueOf(X));
@@ -150,16 +147,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 capturaDigito(6);
                 break;
             case R.id.multiplicasion:
-                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
-                    T = Z;
-                    Z = Y;
-                    Y = X;
-                    X = input;
-                    lastX = X;
-                    input = 0;
-                    cuantosDigitos = 0;
-                } else
-                    lastX = X;
+                verificaInput();
                 X = X * Y;
                 Y = Z;
                 Z = T;
@@ -175,16 +163,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 capturaDigito(3);
                 break;
             case R.id.sustraccion:
-                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
-                    T = Z;
-                    Z = Y;
-                    Y = X;
-                    X = input;
-                    lastX = X;
-                    input = 0;
-                    cuantosDigitos = 0;
-                } else
-                    lastX = X;
+                verificaInput();
                 X = Y - X;
                 Y = Z;
                 Z = T;
@@ -194,17 +173,11 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 capturaDigito(0);
                 break;
             case R.id.modulo:
-                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
-                    T = Z;
-                    Z = Y;
-                    Y = X;
-                    X = input;
-                    lastX = X;
-                    input = 0;
-                    cuantosDigitos = 0;
-                } else
-                    lastX = X;
-                X = Y % X;
+                verificaInput();
+                if (X == 0)
+                    SystemMsg.msg(getApplicationContext(),"División por cero invalida");
+                else
+                    X = Y % X;
                 Y = Z;
                 Z = T;
                 txtPantalla.setText(String.valueOf(X));
@@ -225,30 +198,30 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.adicion:
-                if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
-                    T = Z;
-                    Z = Y;
-                    Y = X;
-                    X = input;
-                    lastX = X;
-                    input = 0;
-                    cuantosDigitos = 0;
-                } else
-                    lastX = X;
+                verificaInput();
                 X = X + Y;
                 Y = Z;
                 Z = T;
                 txtPantalla.setText(String.valueOf(X));
                 break;
         }
+        /*
+            Mostramos abajo del teclado el comportamiento del stack HP para verificar su funcionamiento
+            algunas de las operaciones que ocurren en el stack no se pueden mostrar ya que ocurren
+            internamente en la máquina y esta visualización no las ve
+         */
         pantallaLastX.setText(String.valueOf(lastX));
         pantallaT.setText(String.valueOf(T));
         pantallaZ.setText(String.valueOf(Z));
         pantallaY.setText(String.valueOf(Y));
         pantallaX.setText(String.valueOf(X));
-
     }
 
+    /*
+        Esta función implementa la captura de digitos, utiliza un regisro dedicado y verifica
+        si el numero es mayor a diez posiciones, cuando esto ocurre vibra para avizar que
+        se alcanzó el límite
+     */
     private void capturaDigito(int d) {
         if (cuantosDigitos++ < maximoNumeroDeDigitos) {
             if (input < 0)
@@ -260,5 +233,21 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
             mVibrator.vibrate(100);
         }
         txtPantalla.setText(String.valueOf(input));
+    }
+
+    /*
+        se usa esta rutina verificar si se esta usando el registro input
+     */
+    private void verificaInput() {
+        if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
+            T = Z;
+            Z = Y;
+            Y = X;
+            X = input;
+            lastX = X;
+            input = 0;
+            cuantosDigitos = 0;
+        } else
+            lastX = X;
     }
 }
