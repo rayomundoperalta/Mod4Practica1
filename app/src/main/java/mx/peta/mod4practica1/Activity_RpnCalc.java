@@ -131,10 +131,11 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 verificaInput();
                 if (X == 0)
                     SystemMsg.msg(getApplicationContext(), "división por cero invalida");
-                else
+                else {
                     X = Y / X;
-                Y = Z;
-                Z = T;
+                    Y = Z;
+                    Z = T;
+                }
                 txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.cuatro:
@@ -176,10 +177,11 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 verificaInput();
                 if (X == 0)
                     SystemMsg.msg(getApplicationContext(),"División por cero invalida");
-                else
+                else {
                     X = Y % X;
-                Y = Z;
-                Z = T;
+                    Y = Z;
+                    Z = T;
+                }
                 txtPantalla.setText(String.valueOf(X));
                 break;
             case R.id.enter:
