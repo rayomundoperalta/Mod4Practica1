@@ -45,6 +45,8 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_rpn_calc);
         txtPantalla = (TextView) findViewById(R.id.pantalla);
         txtPantalla.setText(String.valueOf(lastX));
+
+        // espacio abajo del teclado para mostrar el stack HP
         pantallaT = (TextView) findViewById(R.id.T);
         pantallaZ = (TextView) findViewById(R.id.Z);
         pantallaY = (TextView) findViewById(R.id.Y);
@@ -83,7 +85,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.CHS:
+            case R.id.CHS: // change sign
                 if (cuantosDigitos > 0) {
                     input = - input;
                     txtPantalla.setText(String.valueOf(input));
@@ -92,7 +94,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                     txtPantalla.setText(String.valueOf(X));
                 }
                 break;
-            case R.id.CLS:
+            case R.id.CLS:  // clear stack
                 X = 0;
                 Y = 0;
                 Z = 0;
@@ -101,7 +103,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 cuantosDigitos = 0;
                 txtPantalla.setText(String.valueOf(X));
                 break;
-            case R.id.CLX:
+            case R.id.CLX:  // clear X
                 if (cuantosDigitos > 0) {
                     input = 0;
                     cuantosDigitos = 0;
@@ -111,7 +113,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                     txtPantalla.setText(String.valueOf(X));
                 }
                 break;
-            case R.id.x_intercambia_y:
+            case R.id.x_intercambia_y:  // intercambia x y y
                 long temp;
                 temp = X;
                 X = Y;
@@ -239,6 +241,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
 
     /*
         se usa esta rutina verificar si se esta usando el registro input
+        Esta rutina trabaja con side effects unicamente
      */
     private void verificaInput() {
         if (cuantosDigitos > 0) { // el usuario ha tecleado un numero
