@@ -5,6 +5,7 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -12,10 +13,12 @@ import org.w3c.dom.Text;
 import mx.peta.mod4practica1.Utileria.SystemMsg;
 
 /*
-    Se implementa una calculadora en notación polaca porque esmas simple de implementar
+    Se implementa una calculadora en notación polaca porque es mas simple de implementar
     solo se manejan numeros enteros y se limitan a 10 posiciones de entrada para que no ocurra
     overflow en la multiplicaciones
     Como todas las operaciones son con numeros enteros se implementa la división entera y el modulo
+    Para la calculadora binaria se va a usar el teclado restringido solo se implementa la operación de
+    suma y se usa la misma estructura de la calculadora decimal.
  */
 public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,8 +39,14 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
     private TextView pantallaX;
     private TextView pantallaLastX;
 
-    final private int maximoNumeroDeDigitos = 10; // limitamos el numero de digitos para no manejar overflow
+    final static private int maximoNumeroDeDigitosBinario    = 15;
+    final static private int getMaximoNumeroDeDigitosDecimal = 10;
+    final static private float tamañoTextoPantalla = 40.0f;
+    final static private float tamañoTextoPantallaChico = 25.0f;
+    private int maximoNumeroDeDigitos; // limitamos el numero de digitos para no manejar overflow
     private int cuantosDigitos = 0;
+
+    private boolean binaria = false; // señala cuando se esta en modo binario, solo hay dos modos binario o decimal
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,12 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_rpn_calc);
         txtPantalla = (TextView) findViewById(R.id.pantalla);
         txtPantalla.setText(String.valueOf(lastX));
+        // txtPantalla.setTextSize(getResources().getDimension(R.dimen.textsize));
+        //getResources().getDimension(R.dimen.pantalla_text_size);
+
+        float f = getResources().getDimension(R.dimen.pantalla_text_size);
+        SystemMsg.msg(getApplicationContext(), Float.toString(f));
+        //txtPantalla.setTextSize(20.0f);
 
         // espacio abajo del teclado para mostrar el stack HP
         pantallaT = (TextView) findViewById(R.id.T);
@@ -76,6 +91,18 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.modulo).setOnClickListener(this);
         findViewById(R.id.enter).setOnClickListener(this);
         findViewById(R.id.adicion).setOnClickListener(this);
+        findViewById(R.id.binario).setOnClickListener(this);
+        findViewById(R.id.decimal).setOnClickListener(this);
+        findViewById(R.id.lastx).setOnClickListener(this);
+        findViewById(R.id.R).setOnClickListener(this);
+
+        /*
+            la calculadora nace en modo decinal por lo tanto el boton binario está
+            habilitado y el decimal deshabilitado
+         */
+        findViewById(R.id.decimal).setEnabled(false);
+        txtPantalla.setTextSize(tamañoTextoPantalla);
+        maximoNumeroDeDigitos = getMaximoNumeroDeDigitosDecimal;
     }
 
     /*
@@ -207,6 +234,65 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 Y = Z;
                 Z = T;
                 txtPantalla.setText(String.valueOf(X));
+                break;
+            case R.id.binario:
+                binaria = true;
+                maximoNumeroDeDigitos = maximoNumeroDeDigitosBinario;
+                txtPantalla.setTextSize(tamañoTextoPantallaChico);
+                input = 0;
+                cuantosDigitos = 0;
+                findViewById(R.id.decimal).setEnabled(true);
+                findViewById(R.id.binario).setEnabled(false);
+                findViewById(R.id.CHS).setEnabled(false);
+                findViewById(R.id.dos).setEnabled(false);
+                findViewById(R.id.tres).setEnabled(false);
+                findViewById(R.id.cuatro).setEnabled(false);
+                findViewById(R.id.cinco).setEnabled(false);
+                findViewById(R.id.seis).setEnabled(false);
+                findViewById(R.id.siete).setEnabled(false);
+                findViewById(R.id.ocho).setEnabled(false);
+                findViewById(R.id.nueve).setEnabled(false);
+                findViewById(R.id.division).setEnabled(false);
+                findViewById(R.id.multiplicasion).setEnabled(false);
+                findViewById(R.id.sustraccion).setEnabled(false);
+                findViewById(R.id.modulo).setEnabled(false);
+                X = Y = Z = T = lastX = 0;
+                txtPantalla.setText(String.valueOf(X));
+                break;
+            case R.id.decimal:
+                binaria = false;
+                maximoNumeroDeDigitos = getMaximoNumeroDeDigitosDecimal;
+                txtPantalla.setTextSize(tamañoTextoPantalla);
+                X = Y = Z = T = 0;
+                input = 0;
+                cuantosDigitos = 0;
+                findViewById(R.id.binario).setEnabled(true);
+                findViewById(R.id.decimal).setEnabled(false);
+                findViewById(R.id.CHS).setEnabled(true);
+                findViewById(R.id.dos).setEnabled(true);
+                findViewById(R.id.tres).setEnabled(true);
+                findViewById(R.id.cuatro).setEnabled(true);
+                findViewById(R.id.cinco).setEnabled(true);
+                findViewById(R.id.seis).setEnabled(true);
+                findViewById(R.id.siete).setEnabled(true);
+                findViewById(R.id.ocho).setEnabled(true);
+                findViewById(R.id.nueve).setEnabled(true);
+                findViewById(R.id.division).setEnabled(true);
+                findViewById(R.id.multiplicasion).setEnabled(true);
+                findViewById(R.id.sustraccion).setEnabled(true);
+                findViewById(R.id.modulo).setEnabled(true);
+                txtPantalla.setText(String.valueOf(X));
+                break;
+            case R.id.lastx:
+                T = Z;
+                Z = Y;
+                Y = X;
+                X = lastX;
+                break;
+            case R.id.R:
+                X = Y;
+                Y = Z;
+                Z = T;
                 break;
         }
         /*
