@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Mod4Practica1</string>
+    <string name="cero">0</string>
+    <string name="uno">1</string>
+    <string name="dos">2</string>
+    <string name="tres">3</string>
+    <string name="cuatro">4</string>
+    <string name="cinco">5</string>
+    <string name="seis">6</string>
+    <string name="siete">7</string>
+    <string name="ocho">8</string>
+    <string name="nueve">9</string>
+    <string name="CHS">CHS</string>
+    <string name="CLS">CLS</string>
+    <string name="CLX">CLX</string>
+    <string name="XY">X~Y</string>
+    <string name="signoDivision">/</string>
+    <string name="signoMultiplicacion">*</string>
+    <string name="signoSustraccion">-</string>
+    <string name="signoAdicion">+</string>
+    <string name="signoModulo">%</string>
+    <string name="enter">ENTER</string>
+    <string name="bin">BIN</string>
+    <string name="dec">DEC</string>
+    <string name="lastx">lastX</string>
+    <string name="r">R</string>
+
+
 </resources>
