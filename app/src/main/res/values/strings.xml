@@ -24,6 +24,7 @@
     <string name="dec">DEC</string>
     <string name="lastx">lastX</string>
     <string name="r">R</string>
+    <string name="DivInv">División por cero invalida</string>
 
 
 </resources>

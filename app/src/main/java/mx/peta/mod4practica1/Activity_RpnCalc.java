@@ -19,6 +19,16 @@ import mx.peta.mod4practica1.Utileria.SystemMsg;
     Como todas las operaciones son con numeros enteros se implementa la división entera y el modulo
     Para la calculadora binaria se va a usar el teclado restringido solo se implementa la operación de
     suma y se usa la misma estructura de la calculadora decimal.
+    En la calculadora binaria se manejan 15 digitos en la pantalla.
+    Internamente todo se maneja en decimal, solamente la entrada y la salida se manejan en binario
+    de acuerdo con el estado de la calculadora
+
+    La caclculadora es una calculadora RPN (Reverse Polish Notation) lo que significa que la siguiente
+    operacion
+                (3 + 5) * (7 + 9)
+    se hace de la forma siguiente
+                3 ENTER 5 + 7 ENTER 9 + *
+    lo cual deve dar 128.
  */
 public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,10 +49,10 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
     private TextView pantallaX;
     private TextView pantallaLastX;
 
-    final static private int maximoNumeroDeDigitosBinario    = 15;
+    final static private int maximoNumeroDeDigitosBinario    = 14;
     final static private int getMaximoNumeroDeDigitosDecimal = 10;
     final static private float tamañoTextoPantalla = 40.0f;
-    final static private float tamañoTextoPantallaChico = 25.0f;
+    final static private float tamañoTextoPantallaChico = 20.0f;
     private int maximoNumeroDeDigitos; // limitamos el numero de digitos para no manejar overflow
     private int cuantosDigitos = 0;
 
@@ -53,13 +63,9 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rpn_calc);
         txtPantalla = (TextView) findViewById(R.id.pantalla);
-        txtPantalla.setText(String.valueOf(lastX));
+        display(lastX);
         // txtPantalla.setTextSize(getResources().getDimension(R.dimen.textsize));
         //getResources().getDimension(R.dimen.pantalla_text_size);
-
-        float f = getResources().getDimension(R.dimen.pantalla_text_size);
-        SystemMsg.msg(getApplicationContext(), Float.toString(f));
-        //txtPantalla.setTextSize(20.0f);
 
         // espacio abajo del teclado para mostrar el stack HP
         pantallaT = (TextView) findViewById(R.id.T);
@@ -115,10 +121,10 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
             case R.id.CHS: // change sign
                 if (cuantosDigitos > 0) {
                     input = - input;
-                    txtPantalla.setText(String.valueOf(input));
+                    display(input);
                 } else {
                     X = -X;
-                    txtPantalla.setText(String.valueOf(X));
+                    display(X);
                 }
                 break;
             case R.id.CLS:  // clear stack
@@ -128,16 +134,16 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 T = 0;
                 input = 0;
                 cuantosDigitos = 0;
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.CLX:  // clear X
                 if (cuantosDigitos > 0) {
                     input = 0;
                     cuantosDigitos = 0;
-                    txtPantalla.setText(String.valueOf(input));
+                    display(input);
                 } else {
                     X = 0;
-                    txtPantalla.setText(String.valueOf(X));
+                    display(X);
                 }
                 break;
             case R.id.x_intercambia_y:  // intercambia x y y
@@ -145,7 +151,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 temp = X;
                 X = Y;
                 Y = temp;
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.siete:
                 capturaDigito(7);
@@ -158,14 +164,14 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.division:
                 verificaInput();
-                if (X == 0)
-                    SystemMsg.msg(getApplicationContext(), "división por cero invalida");
+                if (X == 0) // division por cero invalida
+                    SystemMsg.msg(getApplicationContext(), getResources().getString(R.string.DivInv));
                 else {
                     X = Y / X;
                     Y = Z;
                     Z = T;
                 }
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.cuatro:
                 capturaDigito(4);
@@ -181,10 +187,10 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 X = X * Y;
                 Y = Z;
                 Z = T;
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.uno:
-                capturaDigito(1);
+                    capturaDigito(1);
                 break;
             case R.id.dos:
                 capturaDigito(2);
@@ -197,21 +203,21 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 X = Y - X;
                 Y = Z;
                 Z = T;
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.cero:
-                capturaDigito(0);
+                    capturaDigito(0);
                 break;
             case R.id.modulo:
                 verificaInput();
-                if (X == 0)
-                    SystemMsg.msg(getApplicationContext(),"División por cero invalida");
+                if (X == 0) // division por cero invalida
+                    SystemMsg.msg(getApplicationContext(),getResources().getString(R.string.DivInv));
                 else {
                     X = Y % X;
                     Y = Z;
                     Z = T;
                 }
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.enter:
                 if (cuantosDigitos > 0) {
@@ -225,20 +231,20 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                     T = Z;
                     Z = Y;
                     Y = X;
+
                 }
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.adicion:
                 verificaInput();
                 X = X + Y;
                 Y = Z;
                 Z = T;
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.binario:
                 binaria = true;
                 maximoNumeroDeDigitos = maximoNumeroDeDigitosBinario;
-                txtPantalla.setTextSize(tamañoTextoPantallaChico);
                 input = 0;
                 cuantosDigitos = 0;
                 findViewById(R.id.decimal).setEnabled(true);
@@ -257,12 +263,11 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 findViewById(R.id.sustraccion).setEnabled(false);
                 findViewById(R.id.modulo).setEnabled(false);
                 X = Y = Z = T = lastX = 0;
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.decimal:
                 binaria = false;
                 maximoNumeroDeDigitos = getMaximoNumeroDeDigitosDecimal;
-                txtPantalla.setTextSize(tamañoTextoPantalla);
                 X = Y = Z = T = 0;
                 input = 0;
                 cuantosDigitos = 0;
@@ -281,18 +286,24 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 findViewById(R.id.multiplicasion).setEnabled(true);
                 findViewById(R.id.sustraccion).setEnabled(true);
                 findViewById(R.id.modulo).setEnabled(true);
-                txtPantalla.setText(String.valueOf(X));
+                display(X);
                 break;
             case R.id.lastx:
                 T = Z;
                 Z = Y;
                 Y = X;
                 X = lastX;
+                input = 0;
+                cuantosDigitos = 0;
+                display(X);
                 break;
             case R.id.R:
                 X = Y;
                 Y = Z;
                 Z = T;
+                input = 0;
+                cuantosDigitos = 0;
+                display(X);
                 break;
         }
         /*
@@ -313,16 +324,24 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
         se alcanzó el límite
      */
     private void capturaDigito(int d) {
-        if (cuantosDigitos++ < maximoNumeroDeDigitos) {
-            if (input < 0)
-                input = input * 10 - d;
-            else
-                input = input * 10 + d;
+        if (binaria) {
+            if (cuantosDigitos++ < maximoNumeroDeDigitosBinario) {
+                input = input * 2 + d;
+            } else
+                // Vibra por 100 milisegundos
+                mVibrator.vibrate(100);
         } else {
-            // Vibra por 100 milisegundos
-            mVibrator.vibrate(100);
+            if (cuantosDigitos++ < maximoNumeroDeDigitos) {
+                if (input < 0)
+                    input = input * 10 - d;
+                else
+                    input = input * 10 + d;
+            } else {
+                // Vibra por 100 milisegundos
+                mVibrator.vibrate(100);
+            }
         }
-        txtPantalla.setText(String.valueOf(input));
+        display(input);
     }
 
     /*
@@ -340,5 +359,31 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
             cuantosDigitos = 0;
         } else
             lastX = X;
+    }
+
+    private void display(long X) {
+        String buffer  = new String();
+        long exp       = 0;
+        double binario = 0;
+        long digito    = 0;
+        if (binaria) {
+            exp     = 0;
+            binario = 0;
+            while(X != 0){
+                digito = X % 2;
+                binario = binario + digito * Math.pow(10, exp);
+                exp++;
+                X = X / 2;
+            }
+            buffer = String.valueOf((long) binario);
+        } else {
+            buffer = String.valueOf(X);
+        }
+        if (buffer.length() > 10) {
+            txtPantalla.setTextSize(tamañoTextoPantallaChico);
+        } else {
+            txtPantalla.setTextSize(tamañoTextoPantalla);
+        }
+        txtPantalla.setText(buffer);
     }
 }
