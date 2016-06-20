@@ -184,7 +184,7 @@ public class Activity_RpnCalc extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.multiplicasion:
                 verificaInput();
-                X = X * Y;
+                X = X * Y;          // Desafortunadamente no podemos detectar overflow !!!!!!
                 Y = Z;
                 Z = T;
                 display(X);
